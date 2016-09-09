@@ -1,0 +1,25 @@
+{
+  "name": "tuscanicz/doctrine-enum-oracle",
+  "type": "library",
+  "description": "Doctrine type for Enum data type in Oracle.",
+  "keywords": ["oracle", "doctrine", "orm", "enum"],
+  "homepage": "https://github.com/tuscanicz/doctrine-enum-oracle",
+  "license": "MIT",
+  "authors": [
+	{
+	  "name": "Petr Bechyne",
+	  "email": "tuscanicz@gmail.com"
+	}
+  ],
+  "require": {
+	"php": ">=5.5.0",
+	"kstefan/enum": "~1.0",
+	"doctrine/orm": "~2.5"
+  },
+  "require-dev": {
+	"phpunit/phpunit": "~4.0"
+  },
+  "autoload": {
+	"psr-4": {"AwsSnapshots\\": "src/DoctrineEnumOracle"}
+  }
+}
