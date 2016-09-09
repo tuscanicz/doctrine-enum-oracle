@@ -4,6 +4,7 @@ namespace DoctrineEnumOracle;
 
 use Doctrine\DBAL\Types\Type;
 use Doctrine\DBAL\Platforms\AbstractPlatform;
+use Doctrine\ORM\Mapping\UnderscoreNamingStrategy;
 use Enum\AbstractEnum;
 
 abstract class AbstractEnumType extends Type
@@ -25,7 +26,7 @@ abstract class AbstractEnumType extends Type
      */
     public function requiresSQLCommentHint(AbstractPlatform $platform)
     {
-        return true;
+        return false;
     }
 
     /**
@@ -33,10 +34,36 @@ abstract class AbstractEnumType extends Type
      */
     public function getSQLDeclaration(array $fieldDeclaration, AbstractPlatform $platform)
     {
+        $fieldName = $this->getName();
+        $fieldValues = $this->getEnumValues();
+        if (count($fieldValues) === 0) {
+            throw new \Exception('Specified Enum is empty');
+        }
         if (!isset($fieldDeclaration['length'])) {
             $fieldDeclaration['length'] = 20;
         }
+        $declaration = $platform->getVarcharTypeDeclarationSQL($fieldDeclaration);
 
-        return $platform->getVarcharTypeDeclarationSQL($fieldDeclaration);
+        return sprintf(
+            "%s CHECK ('%s' in ('%s'))'",
+            $declaration,
+            $fieldName,
+            "'" . implode("', '", $this->getEnumValues()) . "''"
+        );
     }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getName()
+    {
+        $namingStrategy = new UnderscoreNamingStrategy();
+
+        return $namingStrategy->propertyToColumnName(get_class($this));
+    }
+
+    /**
+     * @return string[]
+     */
+    abstract public function getEnumValues();
 }
