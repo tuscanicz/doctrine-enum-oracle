@@ -25,6 +25,20 @@ abstract class AbstractEnumType extends Type
     /**
      * {@inheritdoc}
      */
+    public function convertToPHPValue($value, AbstractPlatform $platform)
+    {
+        if ($value === null) {
+            return null;
+        }
+        $enumClassName = $this->getEnumClassName();
+
+        return new $enumClassName($value);
+    }
+
+
+    /**
+     * {@inheritdoc}
+     */
     public function requiresSQLCommentHint(AbstractPlatform $platform)
     {
         return false;
@@ -46,7 +60,7 @@ abstract class AbstractEnumType extends Type
         $declaration = $platform->getVarcharTypeDeclarationSQL($fieldDeclaration);
 
         return sprintf(
-            "%s CHECK ('%s' in (%s))",
+            "%s CHECK ('%s' IN (%s))",
             $declaration,
             $fieldName,
             "'" . implode("', '", $this->getEnumValues()) . "'"
@@ -63,8 +77,15 @@ abstract class AbstractEnumType extends Type
         return $namingStrategy->propertyToColumnName((new ReflectionClass($this))->getShortName());
     }
 
+    public function getEnumValues()
+    {
+        $enumClassName = $this->getEnumClassName();
+
+        return $enumClassName::getValues();
+    }
+
     /**
-     * @return string[]
+     * @return AbstractEnum
      */
-    abstract public function getEnumValues();
+    abstract public function getEnumClassName();
 }

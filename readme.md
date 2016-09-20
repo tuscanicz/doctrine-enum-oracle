@@ -37,21 +37,9 @@ use MyApp\Enum\MyExampleEnum;
 
 class MyExampleType extends AbstractEnumType
 {
-    /**
-     * {@inheritdoc}
-     */
-    public function convertToPHPValue($value, AbstractPlatform $platform)
+    public function getEnumClassName()
     {
-        if ($value === null) {
-            return null;
-        }
-
-        return new MyExampleEnum($value);
-    }
-
-    public function getEnumValues()
-    {
-        return MyExampleEnum::getValues();
+        return MyExampleEnum::class;
     }
 }
 ```
