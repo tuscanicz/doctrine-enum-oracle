@@ -6,6 +6,7 @@ use Doctrine\DBAL\Types\Type;
 use Doctrine\DBAL\Platforms\AbstractPlatform;
 use Doctrine\ORM\Mapping\UnderscoreNamingStrategy;
 use Enum\AbstractEnum;
+use ReflectionClass;
 
 abstract class AbstractEnumType extends Type
 {
@@ -34,7 +35,7 @@ abstract class AbstractEnumType extends Type
      */
     public function getSQLDeclaration(array $fieldDeclaration, AbstractPlatform $platform)
     {
-        $fieldName = $this->getName();
+        $fieldName = $fieldDeclaration['name'];
         $fieldValues = $this->getEnumValues();
         if (count($fieldValues) === 0) {
             throw new \Exception('Specified Enum is empty');
@@ -45,10 +46,10 @@ abstract class AbstractEnumType extends Type
         $declaration = $platform->getVarcharTypeDeclarationSQL($fieldDeclaration);
 
         return sprintf(
-            "%s CHECK ('%s' in ('%s'))'",
+            "%s CHECK ('%s' in (%s))",
             $declaration,
             $fieldName,
-            "'" . implode("', '", $this->getEnumValues()) . "''"
+            "'" . implode("', '", $this->getEnumValues()) . "'"
         );
     }
 
@@ -59,7 +60,7 @@ abstract class AbstractEnumType extends Type
     {
         $namingStrategy = new UnderscoreNamingStrategy();
 
-        return $namingStrategy->propertyToColumnName(get_class($this));
+        return $namingStrategy->propertyToColumnName((new ReflectionClass($this))->getShortName());
     }
 
     /**
