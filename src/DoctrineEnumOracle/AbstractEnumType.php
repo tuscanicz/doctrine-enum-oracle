@@ -60,7 +60,7 @@ abstract class AbstractEnumType extends Type
         $declaration = $platform->getVarcharTypeDeclarationSQL($fieldDeclaration);
 
         return sprintf(
-            "%s CHECK ('%s' IN (%s))",
+            "%s CHECK (%s IN (%s))",
             $declaration,
             $fieldName,
             "'" . implode("', '", $this->getEnumValues()) . "'"

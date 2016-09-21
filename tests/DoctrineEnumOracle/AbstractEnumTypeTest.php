@@ -42,7 +42,7 @@ class AbstractEnumTypeTest extends PHPUnit_Framework_TestCase
         $fieldDeclaration = ['name' => 'TestColumnName'];
 
         $this->assertSame(
-            "VARCHAR2(20) CHECK ('TestColumnName' IN ('first', 'second', 'third'))",
+            "VARCHAR2(20) CHECK (TestColumnName IN ('first', 'second', 'third'))",
             $this->stub->getSQLDeclaration($fieldDeclaration, $oraclePlatform)
         );
         $this->assertEquals('test_type', $this->stub->getName());
@@ -54,7 +54,7 @@ class AbstractEnumTypeTest extends PHPUnit_Framework_TestCase
         $fieldDeclaration = ['name' => 'TestColumnName', 'length' => 100, 'fixed' => true];
 
         $this->assertSame(
-            "CHAR(100) CHECK ('TestColumnName' IN ('first', 'second', 'third'))",
+            "CHAR(100) CHECK (TestColumnName IN ('first', 'second', 'third'))",
             $this->stub->getSQLDeclaration($fieldDeclaration, $oraclePlatform)
         );
         $this->assertEquals('test_type', $this->stub->getName());
