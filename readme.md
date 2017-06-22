@@ -2,11 +2,11 @@
 
 An abstract class defining a new Doctrine type for Enum data type in Oracle.
 
-Has dependency on ``kstefan/enum`` and Doctrine 2 `doctrine/orm`.
+Has dependency on ``tuscanicz/enum`` and Doctrine 2 `doctrine/orm`.
 
 ## How to use
 
-Prepare a new Enum using `kstefan/enum`:
+Prepare a new Enum using `tuscanicz/enum`:
 
 ```php
 <?php
